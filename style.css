@@ -490,3 +490,58 @@ body::before {
   transform: translateY(0);
   box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
 }
+
+
+
+/* Tablet and Mobile Responsiveness */
+@media (max-width: 768px) {
+  .select-box {
+    max-width: 90%;
+    padding: 40px 30px 40px;
+  }
+
+  .select-box header {
+    font-size: 28px;
+    padding-bottom: 20px;
+  }
+
+  .select-box .title {
+    font-size: 20px;
+    margin: 20px 0;
+  }
+
+  .options button {
+    font-size: 18px;
+    padding: 18px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .select-box {
+    max-width: 95%;
+    padding: 50px 25px 45px;
+  }
+
+  .select-box header {
+    font-size: 26px;
+    padding-bottom: 15px;
+  }
+
+  .select-box .title {
+    font-size: 18px;
+    margin: 20px 0;
+  }
+
+  .options button {
+    font-size: 16px;
+    padding: 16px 0;
+    border-radius: 10px;
+  }
+
+  .play-area section span {
+    height: 80px;
+    width: 80px;
+    font-size: 36px;
+    line-height: 80px;
+  }
+}
