@@ -544,4 +544,10 @@ body::before {
     font-size: 36px;
     line-height: 80px;
   }
+
+   body::before {
+    background-size: 100px 100px;
+  }
+  
+
 }
