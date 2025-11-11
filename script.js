@@ -25,19 +25,29 @@ window.onload = () => {
 
 // Player X selection
 selectBtnX.onclick = () => {
-    selectBox.classList.add("hide");
-    playBoard.classList.add("show");
+    selectBox.style.transform = "translate(-50%, -50%) scale(0.8)";
+    selectBox.style.opacity = "0";
+    setTimeout(() => {
+        selectBox.classList.add("hide");
+        playBoard.classList.add("show");
+    }, 300);
 };
 
 // Player O selection
 selectBtnO.onclick = () => {
-    selectBox.classList.add("hide");
-    playBoard.classList.add("show");
-    players.classList.add("active", "player");
+    selectBox.style.transform = "translate(-50%, -50%) scale(0.8)";
+    selectBox.style.opacity = "0";
+    setTimeout(() => {
+        selectBox.classList.add("hide");
+        playBoard.classList.add("show");
+        players.classList.add("active", "player");
+    }, 300);
 };
 
 // Handle user click
 function clickedBox(element) {
+    if (element.childElementCount > 0 || element.id) return; // Prevent clicking on filled boxes
+    
     if (players.classList.contains("player")) {
         playerSign = "O"; // Set sign to 'O' if player selected 'O'
         element.innerHTML = `<i class="${playerOIcon}"></i>`; // Add 'O' icon
@@ -49,6 +59,13 @@ function clickedBox(element) {
     element.setAttribute("id", playerSign); // Set ID to player sign
     element.style.pointerEvents = "none"; 
     playBoard.style.pointerEvents = "none";
+    
+    // Add click animation
+    element.style.transform = "scale(0.8)";
+    setTimeout(() => {
+        element.style.transform = "";
+    }, 200);
+    
     selectWinner(); // Check for a winner
 
     // Random delay for bot's move
@@ -61,7 +78,7 @@ function clickedBox(element) {
 // Bot's move
 function bot() {
     if (runBot) {
-        const availableBoxes = [...allBox].filter(box => !box.childElementCount); // Get available boxes
+        const availableBoxes = [...allBox].filter(box => !box.childElementCount && !box.id); // Get available boxes
         const randomBox = availableBoxes[Math.floor(Math.random() * availableBoxes.length)]; // Pick a random box
 
         if (randomBox) {
@@ -76,6 +93,13 @@ function bot() {
             }
             randomBox.setAttribute("id", playerSign);
             randomBox.style.pointerEvents = "none";
+            
+            // Add bot move animation
+            randomBox.style.transform = "scale(0.8)";
+            setTimeout(() => {
+                randomBox.style.transform = "";
+            }, 200);
+            
             selectWinner(); // Check for a winner
             playBoard.style.pointerEvents = "auto";
             playerSign = "X"; // Reset to player's sign
@@ -101,15 +125,29 @@ function selectWinner() {
         [1, 5, 9], [3, 5, 7]
     ];
 
-    const isWinner = winningCombinations.some(combination => checkIdSign(...combination, playerSign));
+    let winningCombo = null;
+    const isWinner = winningCombinations.some(combination => {
+        if (checkIdSign(...combination, playerSign)) {
+            winningCombo = combination;
+            return true;
+        }
+        return false;
+    });
 
-    if (isWinner) {
+    if (isWinner && winningCombo) {
         runBot = false; // Stop the bot
+        // Highlight winning boxes
+        winningCombo.forEach(boxNum => {
+            const winningBox = document.querySelector(`.box${boxNum}`);
+            if (winningBox) {
+                winningBox.classList.add("winning");
+            }
+        });
         setTimeout(() => {
             resultBox.classList.add("show");
             playBoard.classList.remove("show");
             wonText.innerHTML = `Player <p>${playerSign}</p> won the game!`;
-        }, 700);
+        }, 1000);
     } else if ([...allBox].every(box => box.id)) { // Check for a draw
         runBot = false;
         setTimeout(() => {
